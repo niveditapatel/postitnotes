@@ -6,8 +6,9 @@ from tkinter.messagebox import *
 from tkinter.filedialog import *
 import tkinter.font as tkFont
 from tkinter.colorchooser import *
-
-file = None
+from tkinter import Label
+from PIL import ImageTk, Image
+from tkinter import filedialog
 
 class NewWindow(Toplevel): 
       
@@ -32,14 +33,144 @@ def callback():
     print("called the callback!")
     
 def newnotewindow():
-    b1.bind("<Button>",  
-         lambda e: NewWindow(root)) 
+    NewWindow=Toplevel(root)
+    #b1.bind("<Button>",  
+     #    lambda e: NewWindow)
+    NewWindow.resizable(False, False)
+    NewWindow.geometry("400x450")
+    imgs = dic_imgs()
+
+    toolbar = Frame(NewWindow)
+    toolbar.configure(bg = 'white')
+    toolbar.pack(side=TOP, fill=X)
+
+    b1 = Button(
+        toolbar,
+        relief=FLAT,
+        compound = LEFT,
+        command=newnotewindow,
+       )
+    b1.pack(side=LEFT, padx=0, pady=3)
+
+    b2 = Button(
+        toolbar,
+        compound = LEFT,
+        command=colorback,
+        relief=FLAT,
+        )
+    b2.pack(side=LEFT, padx=3, pady=3)
+
+    b3 = Button(
+        toolbar,
+        compound = LEFT,
+        command=callback,
+        relief=FLAT,
+        )
+    b3.pack(side=LEFT, padx=3, pady=3)
+
+    b4 = Button(
+        toolbar,
+        compound = LEFT,
+        command=savenote,
+        relief=FLAT,
+        )
+    b4.pack(side=LEFT, padx=3, pady=3)
+
+    b5 = Button(
+        toolbar,
+        compound = LEFT,
+        command=callback,
+        relief=FLAT,
+        )
+    b5.pack(side=RIGHT, padx=3, pady=3)
+
+    b6 = Button(
+        toolbar,
+        compound = LEFT,
+        command=callback,
+        relief=FLAT,
+        )
+    b6.pack(side=RIGHT, padx=3, pady=3)
+
+    textarea = Frame(NewWindow,width = 400, height = 380,background='white')
+
+    textarea.pack()
+    thisScrollBar = Scrollbar(textarea,width = 10)
+    thisScrollBar.pack(side=RIGHT,fill=Y) 
+    fontStyle = tkFont.Font(family="Lucida Grande", size=20)
+    text = Text(textarea,yscrollcommand=thisScrollBar.set,font=fontStyle)
+
+    text.configure(font = ("Times"), bg = 'aliceblue')
+    text.config(font=fontStyle)
+    thisScrollBar.config(command=text.yview)
+    text.place(x=0,y=0,height=380,width=390)
+    thisScrollBar.place(x=390,y=0,height=380,width=10)
+
+    toolbar2 = Frame(NewWindow)
+    toolbar2.configure(background = 'white')
+    toolbar2.pack(side=BOTTOM, fill=X)
+
+    c1 = Button(
+        toolbar2,
+        relief=FLAT,
+        compound = LEFT,
+        command=fontstyle,
+        )
+    c1.pack(side=LEFT, padx=3, pady=3)
+
+    c2 = Button(
+        toolbar2,
+        compound = LEFT,
+        command=callback,
+        relief=FLAT,
+       )
+    c2.pack(side=LEFT, padx=3, pady=3)
+    c3 = Button(
+        toolbar2,
+        relief=FLAT,
+        compound = LEFT,
+        command=strikethrough,
+        )
+    c3.pack(side=RIGHT, padx=3, pady=3)
+
+    c4 = Button(
+        toolbar2,
+        compound = LEFT,
+        command=make_underline,
+        relief=FLAT,
+       )
+    c4.pack(side=RIGHT, padx=3, pady=3)
+    c5 = Button(
+        toolbar2,
+        relief=FLAT,
+        compound = LEFT,
+        command=make_italics,
+        )
+    c5.pack(side=RIGHT, padx=3, pady=3)
+
+    c6 = Button(
+        toolbar2,
+        compound = LEFT,
+        command=make_bold,
+        relief=FLAT,
+       )
+    c6.pack(side=RIGHT, padx=3, pady=3)
+
+    
     
 def newnote():
     root.title("Untitled - Sticky Note") 
     global file 
     file = None
     text.delete(1.0,END)
+
+def addimage():
+    path=filedialog.askopenfilename(filetypes=[("Image File",'.jpg')])
+    im = Image.open(path)
+    tkimage = ImageTk.PhotoImage(im)
+    myvar=Label(root,image = tkimage)
+    myvar.image = tkimage
+    myvar.pack()
     
 def savenote():
     global file
@@ -196,7 +327,7 @@ b2.pack(side=LEFT, padx=3, pady=3)
 b3 = Button(
     toolbar,
     compound = LEFT,
-    command=callback,
+    command=addimage,
     relief=FLAT,
     )
 b3.pack(side=LEFT, padx=3, pady=3)
